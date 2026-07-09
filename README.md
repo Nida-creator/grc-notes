@@ -1,32 +1,22 @@
-# GRC Notes
+# GRC-Notes
 
-Personal notes on governance, risk, and compliance frameworks — written in plain language as I work through them.
+Study notes and applied exercises across GRC frameworks, built as part of a purple team / GRC learning track. Each framework folder contains reference notes plus at least one applied exercise — either scoped to a real project (MediScan AI Pro) or a fictional company scenario built to demonstrate the framework's applied workflow.
 
----
+## Contents
 
-## Frameworks covered
+### [`iso-27001/`](./iso-27001)
+- [`study-notes.md`](./iso-27001/study-notes.md) — ISO/IEC 27001:2022 reference notes: Clauses 4–10 (mandatory ISMS requirements), full Annex A control list (93 controls, 4 themes), and a quick-revision cheat sheet.
+- [`mediscan-mini-soa.md`](./iso-27001/mediscan-mini-soa.md) — A mini Statement of Applicability applying Annex A to MediScan AI Pro, scoping ~20 controls with implementation status and justification for inclusion/exclusion.
 
-| Framework | Status |
-|-----------|--------|
-| NIST CSF 2.0 | Substantially covered — full Core, Profiles, Tiers, ERM integration, and an applied gap-analysis example |
-| ISO 27001 | Not started |
-| CISA Resources | Not started |
+### [`nist-csf/`](./nist-csf)
+- [`study-notes.md`](./nist-csf/study-notes.md) — NIST CSF 2.0 reference notes: the six functions (Govern, Identify, Protect, Detect, Respond, Recover) and how they map to real SOC/GRC workflows.
+- [`csf-applied-gap-analysis-example.md`](./nist-csf/csf-applied-gap-analysis-example.md) — A worked example applying the CSF 2.0 Profile lifecycle (Current Profile, Target Profile, gap analysis, POA&M) to a fictional company scenario.
 
----
+## Why this repo exists
 
-## Structure
+Documentation of hands-on framework study, kept public and current as part of an ongoing GRC/purple team skill-building track — each entry moves past the reference text into an applied, worked example rather than staying abstract.
 
-- `/nist-csf/` — full breakdown of CSF 2.0 (Functions, Categories, Profiles, Tiers, ERM integration) plus a worked applied example
-- `/iso-27001/` — overview and key controls
-- `/cisa/` — relevant guides and summaries
+## Related repos
 
----
-
-## NIST CSF 2.0
-
-- [Study Notes](nist-csf/notes.md) — full breakdown of all 6 Functions, 22 Categories, Organizational Profiles, Tiers, and integration with ERM, privacy risk, supply chain risk, and the NIST AI RMF
-- [Applied Example: Gap Analysis & POA&M](nist-csf/applied-gap-analysis-example.md) — a worked example applying CSF to a fictional company: Current Profile, Target Profile, prioritized gap analysis, and action plan
-
----
-
-*Updated continuously throughout summer 2026*
+- [`htb-writeups`](https://github.com/Nida-creator/htb-writeups) — HackTheBox machine writeups
+- [`portswigger-notes`](https://github.com/Nida-creator/portswigger-notes) — PortSwigger Web Security Academy lab notes
