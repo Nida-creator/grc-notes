@@ -1,0 +1,37 @@
+# Mini Statement of Applicability (SoA) — MediScan AI Pro
+
+**Exercise context:** ISO/IEC 27001:2022, Clause 6.1.3(d) requires a Statement of Applicability — a document listing every Annex A control considered, whether it's applicable, its implementation status, and justification for any exclusion. This is a learning exercise treating **MediScan AI Pro** (health report analyzer, Flask/LLaMA 3.3 70B/Tesseract OCR/Docker/HuggingFace) as the "organization" being assessed. It's illustrative — MediScan is a hackathon project, not a certified ISMS — but the reasoning process mirrors what a real GRC analyst does when scoping an SoA for a small SaaS product.
+
+**Scope statement (Clause 4.3, simplified):** The ISMS boundary covers the MediScan AI Pro application — the health-report upload/OCR/LLM-analysis pipeline, its HuggingFace Spaces deployment, and the API keys/credentials used to call third-party model services. It does not cover the personal devices of the 6-person hackathon team or any physical office space, since the project has neither.
+
+| ID | Control Name | Applicable? | Status | Justification |
+|----|---|---|---|---|
+| 5.1 | Policies for information security | Partially | Not formally documented | No written info-sec policy exists; informal team norms (e.g. "don't log user data") were followed but never documented or approved. Gap to close if MediScan were productionized. |
+| 5.9 | Inventory of information and other associated assets | Yes | Not implemented | No formal asset inventory (API keys, model endpoints, storage) was maintained — a real gap even for a small project, since untracked API keys are a common leak vector. |
+| 5.12 | Classification of information | Yes | Partially implemented | Health report data is informally treated as sensitive (not logged, not retained), but there's no formal classification scheme (e.g. Public/Internal/Confidential/Restricted labels). |
+| 5.14 | Information transfer | Yes | Implemented | Data transfer to the LLaMA 3.3 70B API and Tesseract OCR happens over HTTPS by default via the hosting platform; no custom transfer agreements needed since these are managed API calls, not bulk data-sharing arrangements. |
+| 5.15 | Access control | Yes | Partially implemented | Access to the deployed app is public-facing by design (it's a demo tool); access to the underlying HuggingFace Space admin panel and API keys is restricted to the team, but no formal access review process exists. |
+| 5.19 | Information security in supplier relationships | Yes | Partially implemented | MediScan depends on HuggingFace and the LLaMA API provider as "suppliers." No formal risk assessment of these providers' security posture was done — the team relied on their reputations rather than a documented review. |
+| 5.24 | Information security incident management planning and preparation | Yes | Not implemented | No incident response plan exists. If the API keys were leaked or a data-handling flaw were found, there's no defined process for who responds or how. Flagged as a real gap. |
+| 5.31 | Legal, statutory, regulatory and contractual requirements | Yes | Partially implemented | Health data implies potential relevance to data-protection expectations (even absent a specific Pakistani health-data law equivalent to HIPAA/GDPR); the team's "no retention" design choice is a good instinct but isn't mapped to any specific legal requirement. |
+| 5.34 | Privacy and protection of personally identifiable information (PII) | Yes | Implemented | Core design principle: no user data retained post-session, reducing PII exposure by design. This is the strongest control in the whole project and worth naming explicitly in interviews. |
+| 6.3 | Information security awareness, education and training | Yes | Not implemented | No formal security training was given to the 6-member team; security decisions were made ad hoc by whoever was working on that part of the stack. |
+| 6.6 | Confidentiality or non-disclosure agreements | No | Excluded | No NDAs exist between hackathon teammates or with judges. Justification for exclusion: informal student hackathon context, no contractual relationship requiring one, and no proprietary trade secrets involved. |
+| 7.9 | Security of assets off-premises | No | Excluded | The application is fully cloud-hosted (HuggingFace Spaces); there are no physical off-site assets (laptops, servers, storage media) that fall under this control's scope. |
+| 8.1 | User endpoint devices | No | Excluded | MediScan doesn't manage or issue end-user devices — it's a web app users access via browser. Endpoint security is out of the ISMS boundary as scoped. |
+| 8.3 | Information access restriction | Yes | Partially implemented | The app itself doesn't require login (public demo), so there's no user-level access restriction. Admin-side access (HuggingFace Space settings, API dashboard) is restricted to the team but not formally governed. |
+| 8.5 | Secure authentication | Yes | Not implemented | No authentication layer exists for end users (by design — public demo tool). If MediScan handled real patient data in production, this would need to change; flagged as a required control before any real deployment. |
+| 8.9 | Configuration management | Yes | Partially implemented | Docker is used, which gives some baseline reproducibility/configuration consistency, but there's no formal configuration review or hardening checklist. |
+| 8.10 | Information deletion | Yes | Implemented | Directly matches the project's stated design: no user data retained post-session. This is the clearest, most defensible "Yes/Implemented" control in the whole SoA. |
+| 8.12 | Data leakage prevention | Yes | Partially implemented | The no-retention design limits leakage risk by default, but there's no active DLP tooling (e.g. scanning outbound traffic, monitoring for accidental logging of PII). |
+| 8.15 | Logging | Yes | Partially implemented | Application-level logging exists for debugging purposes (typical Flask/Docker setup), but there's no formal log review process, and care would be needed to ensure logs don't inadvertently capture health-report content. |
+| 8.24 | Use of cryptography | Yes | Implemented | API keys are stored in environment variables rather than hardcoded, and communication with model APIs runs over HTTPS/TLS by default via the hosting platform. |
+
+**Totals:** 20 controls considered · 17 applicable · 3 excluded (with justification) · 3 fully implemented · 10 partially implemented · 4 not implemented
+
+## What this exercise demonstrates (for interviews/CV framing)
+
+- **Scoping judgment**, not just recall: three controls were deliberately excluded with a reasoned justification (6.6, 7.9, 8.1) rather than included by default — this is the actual GRC skill, not memorizing all 93 controls.
+- **Honest gap identification**: most controls landed on "partially implemented" or "not implemented" rather than inflating the project's maturity. A real SoA is only useful if it's honest about gaps — auditors specifically check for this.
+- **Traceable design decisions**: 8.10 (deletion) and 5.34 (PII protection) show that MediScan's "no data retained post-session" design choice maps directly to two named Annex A controls — a good talking point that ties your project work to framework language.
+- **Named next steps**: the gaps flagged here (5.24 incident response, 8.5 authentication, 6.3 awareness) are the natural "if this went to production, here's what I'd fix first" answer for an interview follow-up question.
